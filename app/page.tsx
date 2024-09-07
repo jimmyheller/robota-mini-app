@@ -32,7 +32,7 @@ export default function Home() {
       </button>
       {count > 0 && (
         <p className="mt-4 text-lg">
-          You've clicked the button {count} time{count !== 1 ? "s" : ""}!
+          You&apos;ve clicked the button {count} time{count !== 1 ? "s" : ""}!
         </p>
       )}
     </div>
