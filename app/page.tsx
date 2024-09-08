@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import WebApp from "@twa-dev/sdk";
 
 export default function Home() {
   const [strikes, setStrikes] = useState(0);
@@ -11,17 +12,13 @@ export default function Home() {
   const [duration, setDuration] = useState(30);
 
   useEffect(() => {
-    // Import the SDK dynamically to avoid SSR issues
-    import("@twa-dev/sdk").then((WebApp) => {
-      WebApp.default.ready();
-      setIsReady(true);
+    WebApp.ready();
+    setIsReady(true);
 
-      // Get user info
-      const user = WebApp.default.initDataUnsafe.user;
-      if (user && user.username) {
-        setUsername(user.username);
-      }
-    });
+    const user = WebApp.initDataUnsafe.user;
+    if (user && user.username) {
+      setUsername(user.username);
+    }
   }, []);
 
   useEffect(() => {
