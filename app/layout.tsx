@@ -1,6 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import TokenLogo from "./components/TokenLogo";
+import Navigation from "./components/Navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} flex flex-col min-h-screen bg-black text-white`}>
+        <header className="flex justify-center items-center p-4">
+          <TokenLogo width={60} height={60} />
+        </header>
+        <main className="flex-grow p-4">
+          {children}
+        </main>
+        <Navigation />
+      </body>
     </html>
   );
 }
