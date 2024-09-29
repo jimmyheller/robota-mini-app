@@ -1,6 +1,9 @@
 // app/streak-celebration/page.tsx
+'use client';
+
 import React from 'react';
 import Confetti from '../components/Confetti';
+import Button from '../components/Button';
 
 export default function StreakCelebrationPage() {
   return (
@@ -13,6 +16,9 @@ export default function StreakCelebrationPage() {
           <span className="text-gray-400">1,400</span>{' '}
           <span className="font-bold">$TODO</span>
         </p>
+        <div className="w-full max-w-xs">
+          <Button text="Continue..." href="/home" />
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
-// components/Navigation.tsx
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Home, BarChart2, Users } from 'lucide-react';
+import { Home, BarChart2, Users, Info } from 'lucide-react';
 
 const Navigation: React.FC = () => (
   <nav className="flex justify-around py-4 bg-black text-white">
-    <Link href="/" className="flex flex-col items-center">
+    <Link href="/home" className="flex flex-col items-center">
       <Home className="w-6 h-6" />
       <span className="text-xs mt-1">HOME</span>
     </Link>
@@ -16,6 +17,10 @@ const Navigation: React.FC = () => (
     <Link href="/friends" className="flex flex-col items-center">
       <Users className="w-6 h-6" />
       <span className="text-xs mt-1">Friends</span>
+    </Link>
+    <Link href="/telegram-data" className="flex flex-col items-center">
+      <Info className="w-6 h-6" />
+      <span className="text-xs mt-1">Telegram Data</span>
     </Link>
   </nav>
 );
