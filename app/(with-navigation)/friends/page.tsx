@@ -1,8 +1,8 @@
 // app/friends/page.tsx
 import React from 'react';
-import UserProfileCard from '../components/UserProfileCard';
-import FriendItem from '../components/FriendItem';
-import InviteButton from '../components/InviteButton';
+import UserProfileCard from '../../components/UserProfileCard';
+import FriendItem from '../../components/FriendItem';
+import InviteButton from '../../components/InviteButton';
 
 export default function FriendsPage() {
   return (

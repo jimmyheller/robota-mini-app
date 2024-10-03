@@ -1,7 +1,7 @@
 import React from 'react';
-import UserProfileCard from '../components/UserProfileCard';
-import LeaderboardItem from '../components/LeaderboardItem';
-import { getLeaderboard, LeaderboardResponse } from '../../services/leaderboard-service';
+import UserProfileCard from '../../components/UserProfileCard';
+import LeaderboardItem from '../../components/LeaderboardItem';
+import { getLeaderboard, LeaderboardResponse } from '../../../services/leaderboard-service';
 
 async function getLeaderboardData(): Promise<LeaderboardResponse> {
   return getLeaderboard();

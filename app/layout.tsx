@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "./components/Navigation";
 import TelegramInitializer from "./components/TelegramInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,7 +23,6 @@ export default function RootLayout({
         <main className="flex-grow">
           {children}
         </main>
-        <Navigation />
       </body>
     </html>
   );
