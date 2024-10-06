@@ -4,6 +4,9 @@
 import React, { useEffect, useState } from 'react';
 import WebApp from '@twa-dev/sdk';
 import ProgressBar from '../components/ProgressBar';
+import Button from '../components/Button';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface TelegramData {
   user?: {
@@ -18,9 +21,12 @@ interface TelegramData {
 
 const TelegramCheckPage: React.FC = () => {
   const [telegramData, setTelegramData] = useState<TelegramData | null>(null);
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    setIsClient(true);
+    if (typeof window !== 'undefined' && WebApp.initDataUnsafe.user) {
       const data: TelegramData = {
         user: WebApp.initDataUnsafe.user,
       };
@@ -28,7 +34,7 @@ const TelegramCheckPage: React.FC = () => {
     }
   }, []);
 
-  if (typeof window === 'undefined') {
+  if (!isClient) {
     return <div className="p-4">Loading...</div>;
   }
 
@@ -48,11 +54,9 @@ const TelegramCheckPage: React.FC = () => {
           isComplete={isPremium} 
         />
       </div>
-      {isPremium ? (
-        <p className="mt-4 text-green-500">Thank you for being a Telegram Premium user!</p>
-      ) : (
-        <p className="mt-4 text-yellow-500">Consider upgrading to Telegram Premium for additional benefits.</p>
-      )}
+      <div className="w-full max-w-xs mt-8">
+        <Button text="Continue..." href="/welcome-token" />
+      </div>
     </div>
   );
 };

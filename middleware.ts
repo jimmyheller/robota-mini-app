@@ -7,7 +7,9 @@ export function middleware(request: NextRequest) {
 
   // If it's the first visit and not already on the telegram-check page, redirect to telegram-check
   if (!hasVisited && pathname !== '/telegram-check') {
-    return NextResponse.redirect(new URL('/telegram-check', request.url));
+    const response = NextResponse.redirect(new URL('/telegram-check', request.url));
+    response.cookies.set('hasVisited', 'true', { maxAge: 60 * 60 * 24 * 365 }); // 1 year
+    return response;
   }
 
   // For subsequent visits, if on the root path, redirect to streak-celebration
