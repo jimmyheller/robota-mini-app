@@ -1,11 +1,11 @@
-// app/streak-celebration/page.tsx
+// app/welcome-token/page.tsx
 'use client';
 
 import React from 'react';
 import Confetti from '../components/Confetti';
 import Button from '../components/Button';
 
-export default function StreakCelebrationPage() {
+export default function WelcomeTokenPage() {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white relative">
       <Confetti />
@@ -17,7 +17,7 @@ export default function StreakCelebrationPage() {
           <span className="font-bold">$TODO</span>
         </p>
         <div className="w-full max-w-xs">
-          <Button text="Continue..." href="/home" />
+          <Button text="Continue..." href="/streak-celebration" />
         </div>
       </div>
     </div>

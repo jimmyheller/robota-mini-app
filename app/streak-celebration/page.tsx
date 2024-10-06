@@ -16,10 +16,10 @@ export default function StreakCelebrationPage() {
           <span className="text-gray-400">1,400</span>{' '}
           <span className="font-bold">$TODO</span>
         </p>
-        </div>
         <div className="w-full max-w-xs">
           <Button text="Continue..." href="/home" />
         </div>
+      </div>
     </div>
   );
 }
