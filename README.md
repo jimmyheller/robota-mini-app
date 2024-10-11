@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Robota Mini App
 
-## Getting Started
+## Project Overview
+Robota Mini App is a Telegram Mini App designed to gamify user engagement through a token-based reward system and daily streak tracking.
 
-First, run the development server:
+## Technology Stack
+- Frontend: Next.js 13+ (React framework)
+- Backend: Express.js
+- Database: Mongo and Redis
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Project Structure
+- Frontend (Next.js):
+  - `/app`: Main application directory (using App Router)
+  - `/app/components`: Reusable React components
+  - `/app/streak-celebration`: Streak celebration page
+  - `/app/telegram-check`: Initial page for first-time users
+  - `/app/home`: Main dashboard page
+  - `/app/leaderboard`: Leaderboard page
+  - `/app/friends`: Friends page
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Backend (Express.js):
+  - Separate project (not in the same repository as the frontend)
+  - Provides API endpoints for user data, streak tracking, and leaderboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key Features
+1. Daily Streak Tracking:
+   - Users can maintain and view their daily login streak
+   - Streak celebration page displays current streak and tokens earned
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. Token System:
+   - Users earn `$TODO` tokens for various activities
+   - Tokens are displayed in the user interface
 
-## Learn More
+3. Leaderboard:
+   - Displays top users based on tokens or streaks
 
-To learn more about Next.js, take a look at the following resources:
+4. Telegram Integration:
+   - Utilizes Telegram Mini App capabilities
+   - Accesses Telegram user data for authentication and display
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. User Profile:
+   - Displays user information fetched from Telegram
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+6. Friend System:
+   - Users can view and interact with friends (details to be implemented)
 
-## Deploy on Vercel
+## Authentication and Data Flow
+- Initial authentication happens through Telegram Mini App
+- Telegram user ID is used as the primary identifier for users
+- Frontend stores Telegram ID in client-side storage (e.g., localStorage)
+- Backend API requests include Telegram ID for user identification
+- No server-side sessions implemented; the system relies on stateless API calls
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Endpoints (Express.js Backend)
+- `/api/users/authenticate`: authenticate the telegram user and then Creates or fetches user data
+- `/api/users/welcome-token`: Awards welcome tokens to new users
+- `/api/users/daily-streak`: Checks and updates daily streaks
+- `/api/leaderboard`: Retrieves leaderboard data
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Frontend Routes
+- `/`: Initial route, redirects based on user state
+- `/telegram-check`: First-time user check and data collection
+- `/streak-celebration`: Displays streak information after login
+- `/home`: Main dashboard
+- `/leaderboard`: Displays user rankings
+- `/friends`: Friend list and interactions
+- `/telegram-data`: Displays Telegram user information
+
+## Development Notes
+- The project uses Next.js 13+ features, including the App Router
+- Server Components are used for data fetching where possible
+- Client Components are used for interactive elements and state management
+- Tailwind CSS is used for styling
+- The backend is a separate Express.js project, not integrated into the Next.js API routes
+
+## Current Development Status
+- Basic structure and key pages implemented
+- Integration with Telegram Mini App environment in progress
+- Backend API structure defined, implementation details may vary
+
+Note: This README reflects the current understanding of the project and may need updates as development progresses.
