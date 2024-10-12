@@ -1,22 +1,25 @@
 // app/streak-celebration/page.tsx
+import { cookies } from 'next/headers';
 import StreakCelebrationClient from '../components/StreakCelebrationClient';
+import apiClient from '../../lib/api-client';
 
-async function checkDailyStreak() {
-  const response = await fetch('/api/users/daily-streak', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ telegramId: 112344123 }), // Replace with actual Telegram ID
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch streak data');
+async function getStreakData(telegramId: string) {
+  try {
+    return await apiClient.post('/users/daily-streak', { telegramId });
+  } catch (error) {
+    console.error('Error fetching streak data:', error);
+    return null;
   }
-
-  return response.json();
 }
 
 export default async function StreakCelebrationPage() {
-  const streakData = await checkDailyStreak();
+  const cookieStore = cookies();
+  const telegramId = cookieStore.get('telegramId')?.value;
+
+  let streakData = null;
+  if (telegramId) {
+    streakData = await getStreakData(telegramId);
+  }
+
   return <StreakCelebrationClient initialStreakData={streakData} />;
 }

@@ -1,18 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Confetti from '../components/Confetti';
 import Button from '../components/Button';
+import apiClient from '../../lib/api-client';
+import TelegramApiClient from '../../lib/telegram-api-client';
 
-interface StreakCelebrationClientProps {
-  initialStreakData: {
-    streak: number;
-    tokens: number;
-  };
+interface StreakData {
+  streak: number;
+  tokens: number;
 }
 
-export default function StreakCelebrationClient({ initialStreakData }: StreakCelebrationClientProps) {
-  const [streakData] = useState(initialStreakData);
+export default function StreakCelebrationClient() {
+  const [streakData, setStreakData] = useState<StreakData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStreakData = async () => {
+      try {
+        const telegramId = await TelegramApiClient.getUserId();
+        const data = await apiClient.post<StreakData>('/users/daily-streak', { telegramId });
+        setStreakData(data);
+      } catch (err) {
+        console.error('Error fetching streak data:', err);
+        setError('Failed to fetch streak data. Please try again.');
+      }
+    };
+
+    fetchStreakData();
+  }, []);
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!streakData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white relative">

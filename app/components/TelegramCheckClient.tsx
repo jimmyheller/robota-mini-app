@@ -17,7 +17,7 @@ const TelegramCheckClient: React.FC = () => {
     const initTelegram = async () => {
       try {
         const initData = await TelegramApiClient.getInitData();
-
+        console.log('initData', initData);
         if (!initData) {
           setError("Telegram Web App data is not available. Are you running this in Telegram?");
           setIsLoading(false);
