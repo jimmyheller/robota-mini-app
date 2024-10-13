@@ -1,41 +1,50 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Confetti from '../components/Confetti';
 import Button from '../components/Button';
-import apiClient from '../../lib/api-client';
-import TelegramApiClient from '../../lib/telegram-api-client';
+import TelegramApiClient from '../..//lib/telegram-api-client';
 
 interface StreakData {
   streak: number;
   tokens: number;
 }
 
-export default function StreakCelebrationClient() {
-  const [streakData, setStreakData] = useState<StreakData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+interface StreakCelebrationClientProps {
+  initialStreakData: StreakData | null;
+}
+
+export default function StreakCelebrationClient({ initialStreakData }: StreakCelebrationClientProps) {
+  const [streakData, setStreakData] = useState<StreakData | null>(initialStreakData);
+  const [isLoading, setIsLoading] = useState(!initialStreakData);
 
   useEffect(() => {
-    const fetchStreakData = async () => {
+    const initTelegram = async () => {
       try {
         const telegramId = await TelegramApiClient.getUserId();
-        const data = await apiClient.post<StreakData>('/users/daily-streak', { telegramId });
-        setStreakData(data);
-      } catch (err) {
-        console.error('Error fetching streak data:', err);
-        setError('Failed to fetch streak data. Please try again.');
+
+        // If we don't have initial streak data, we could fetch it here
+        // or redirect to a page that will fetch it server-side
+        if (!streakData && telegramId) {
+          // Example: router.push(`/api/fetch-streak?telegramId=${telegramId}`);
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error initializing Telegram WebApp:', error);
+        setIsLoading(false);
       }
     };
 
-    fetchStreakData();
-  }, []);
+    initTelegram();
+  }, [streakData]);
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
+  if (isLoading) {
+    return <div className="text-white">Loading...</div>;
   }
 
   if (!streakData) {
-    return <div>Loading...</div>;
+    return <div className="text-red-500">Failed to load streak data. Please try again.</div>;
   }
 
   return (
