@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import ProgressBar from './ProgressBar';
 import TelegramApiClient from '../../lib/telegram-api-client';
 import apiClient from '../../lib/api-client';
+import Button from './Button';
 
 const TelegramCheckClient: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,11 +24,7 @@ const TelegramCheckClient: React.FC = () => {
           setIsLoading(false);
           return;
         }
-
         const userData = await apiClient.post('/users/authenticate', { initData });
-        // Store user data or token securely (e.g., in an HTTP-only cookie)
-        // For now, we'll just redirect to the welcome page
-        router.push('/welcome-token');
       } catch (error) {
         console.error('Error authenticating user:', error);
         setError("Failed to authenticate. Please try again.");
@@ -56,6 +53,9 @@ const TelegramCheckClient: React.FC = () => {
           progress={100}
           isComplete={true}
         />
+      </div>
+      <div className="w-full max-w-xs">
+        <Button text="Continue..." href="/welcome-token" />
       </div>
     </div>
   );
