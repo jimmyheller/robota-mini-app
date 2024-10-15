@@ -1,16 +1,24 @@
-// app/components/TelegramInitializer.tsx
 'use client';
 
 import { useEffect } from 'react';
-import WebApp from '@twa-dev/sdk';
+import dynamic from 'next/dynamic';
 
-export default function TelegramInitializer() {
+const TelegramInitializer = () => {
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      WebApp.ready();
-      WebApp.expand();
-    }
+    const initTelegram = async () => {
+      if (typeof window !== 'undefined') {
+        const WebApp = (await import('@twa-dev/sdk')).default;
+        WebApp.ready();
+        WebApp.expand();
+      }
+    };
+
+    initTelegram();
   }, []);
 
   return null;
-}
+};
+
+export default dynamic(() => Promise.resolve(TelegramInitializer), {
+  ssr: false
+});
