@@ -25,8 +25,13 @@ const WelcomeTokenClient: React.FC = () => {
     const fetchWelcomeToken = async () => {
       try {
         const telegramId = await TelegramApiClient.getUserId();
-        const response = await apiClient.post<UserData>('/users/welcome-token', { telegramId });
-        setUserData(response);
+        if (telegramId) {
+          const response = await apiClient.post<UserData>('/users/welcome-token', { telegramId });
+          setUserData(response);
+        } else {
+          router.push('/telegram-check');
+          return;
+        }
       } catch (err) {
         console.error('Error fetching welcome token:', err);
         setError('Failed to fetch welcome token. Please try again.');
@@ -56,7 +61,7 @@ const WelcomeTokenClient: React.FC = () => {
       <Confetti />
       <div className="flex-grow flex flex-col items-center justify-center p-6">
         <h1 className="text-5xl font-bold mb-4">Welcome!</h1>
-        <p className="text-2xl mb-4">You`&apos;`ve received your welcome bonus:</p>
+        <p className="text-2xl mb-4">You`&apos;`ve received welcome bonus:</p>
         <p className="text-6xl font-bold mb-8 text-green-400">{userData?.tokens} $TODO</p>
         <div className="w-full max-w-xs">
           <Button text="Continue..." href="/streak-celebration" />

@@ -44,12 +44,8 @@ export default function StreakCelebrationClient() {
       try {
         const telegramId = await TelegramApiClient.getUserId();
         if (telegramId) {
-          const data = await apiClient.post('/users/daily-streak', { telegramId });
-          if (isUserData(data)) {
-            setUserData(data);
-          } else {
-            throw new Error('Invalid user data received');
-          }
+          const data = await apiClient.post<UserData>('/users/daily-streak', { telegramId });
+          setUserData(data);
         } else {
           router.push('/telegram-check');
           return;
