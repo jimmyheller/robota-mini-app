@@ -1,43 +1,47 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Confetti from '../components/Confetti';
-import Button from '../components/Button';
+import { useRouter } from 'next/navigation';
+import apiClient from '../../lib/api-client';
+import TelegramApiClient from '../../lib/telegram-api-client';
+import TokenLogo from './TokenLogo';
+import ProgressBar from './ProgressBar';
+import Button from './Button';
+import Confetti from './Confetti';
 
-async function awardWelcomeToken() {
-  const response = await fetch('/api/users/welcome-token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // You might need to pass user identification here, depending on your backend implementation
-    // body: JSON.stringify({ userId: 'some-user-id' }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to award welcome token');
-  }
-
-  return response.json();
+interface UserData {
+  telegramId: number;
+  username: string;
+  tokens: number;
 }
 
-export default function WelcomeTokenClient() {
-  const [tokens, setTokens] = useState<number | null>(null);
+const WelcomeTokenClient: React.FC = () => {
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    awardWelcomeToken()
-      .then((data) => {
-        setTokens(data.tokens);
+    const fetchWelcomeToken = async () => {
+      try {
+        const telegramId = await TelegramApiClient.getUserId();
+        const response = await apiClient.post<UserData>('/users/welcome-token', { telegramId });
+        setUserData(response);
+      } catch (err) {
+        console.error('Error fetching welcome token:', err);
+        setError('Failed to fetch welcome token. Please try again.');
+      } finally {
         setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error awarding welcome token:', err);
-        setError('Failed to award welcome token. Please try again.');
-        setIsLoading(false);
-      });
+      }
+    };
+
+    fetchWelcomeToken();
   }, []);
+
+  // Render null during server-side rendering
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
   if (isLoading) {
     return <div className="p-4">Loading...</div>;
@@ -53,11 +57,14 @@ export default function WelcomeTokenClient() {
       <div className="flex-grow flex flex-col items-center justify-center p-6">
         <h1 className="text-5xl font-bold mb-4">Welcome!</h1>
         <p className="text-2xl mb-4">You`&apos;`ve received your welcome bonus:</p>
-        <p className="text-6xl font-bold mb-8 text-green-400">{tokens} $TODO</p>
+        <p className="text-6xl font-bold mb-8 text-green-400">{userData?.tokens} $TODO</p>
         <div className="w-full max-w-xs">
           <Button text="Continue..." href="/streak-celebration" />
         </div>
       </div>
     </div>
   );
-}
+
+};
+
+export default WelcomeTokenClient;
