@@ -16,6 +16,7 @@ interface HomeData {
         username: string;
         firstName: string;
         balance: number;
+        initials: string;
     };
     rewards: {
         accountAge: {
@@ -84,6 +85,7 @@ const HomeClient: React.FC = () => {
                 <UserProfile
                     username={homeData.user.username}
                     balance={homeData.user.balance.toLocaleString()}
+                    initials={homeData.user.initials}
                 />
                 <CommunityJoin />
                 <Rewards
@@ -95,7 +97,6 @@ const HomeClient: React.FC = () => {
                     }}
                 />
             </main>
-            <Navigation />
         </div>
     );
 };
