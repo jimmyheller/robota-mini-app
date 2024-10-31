@@ -17,6 +17,7 @@ interface HomeData {
         firstName: string;
         balance: number;
         initials: string;
+        rank: number;
     };
     rewards: {
         accountAge: {
