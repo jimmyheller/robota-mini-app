@@ -1,6 +1,5 @@
 import React from 'react';
 import { UserPlus } from 'lucide-react';
-import WebApp from '@twa-dev/sdk';
 
 interface InviteButtonProps {
   referralCode: string;
@@ -8,22 +7,12 @@ interface InviteButtonProps {
 
 const InviteButton: React.FC<InviteButtonProps> = ({ referralCode }) => {
   const handleInvite = () => {
-    // Create the shareable message
-    const message = `Join me on Robota and get TODO tokens! https://t.me/${process.env.NEXT_PUBLIC_BOT_USERNAME}?start=${referralCode}`;
+    const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || 'rob_mini_test_bot';
+    const shareText = "Join me on Robota and earn $TODO tokens!";
+    const botUrl = `https://t.me/${botUsername}?start=${referralCode}`;
+    const shareUrl = `https://t.me/share/url?url=${botUrl}&text=${shareText}`;
 
-    // Use Telegram's native sharing
-    WebApp.showPopup({
-      title: "Share Invitation",
-      message: "Share your referral link with friends",
-      buttons: [
-        { type: "default", text: "Share", id: "share" },
-        { type: "cancel" }
-      ]
-    }, (buttonId) => {
-      if (buttonId === "share") {
-        WebApp.switchInlineQuery(message, ["users", "groups"]);
-      }
-    });
+    window.open(shareUrl, '_blank');
   };
 
   return (
