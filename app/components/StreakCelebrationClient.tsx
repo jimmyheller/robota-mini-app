@@ -13,24 +13,8 @@ interface UserData {
   username: string;
   firstName: string;
   lastName: string;
-  languageCode: string;
-  isPremium: boolean;
   tokens: number;
   currentStreak: number;
-  referralCode: string;
-  lastVisit: string;
-  __v: number;
-}
-
-function isUserData(data: unknown): data is UserData {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'telegramId' in data &&
-    'tokens' in data &&
-    'currentStreak' in data &&
-    'firstName' in data
-  );
 }
 
 export default function StreakCelebrationClient() {
@@ -40,25 +24,40 @@ export default function StreakCelebrationClient() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const processStreak = async () => {
       try {
         const telegramId = await TelegramApiClient.getUserId();
-        if (telegramId) {
-          const data = await apiClient.post<UserData>('/users/daily-streak', { telegramId });
-          setUserData(data);
-        } else {
+        if (!telegramId) {
           router.push('/telegram-check');
           return;
         }
+
+        const timezoneOffset = new Date().getTimezoneOffset();
+
+        // Try to process streak
+        try {
+          const { user } = await apiClient.post<{ success: boolean; user: UserData }>(
+            '/users/process-daily-streak',
+            { telegramId, timezoneOffset }
+          );
+          setUserData(user);
+        } catch (error: any) {
+          // If streak was already processed, redirect to home
+          if (error.response?.data?.shouldRedirect) {
+            router.push('/home');
+            return;
+          }
+          throw error; // Re-throw other errors
+        }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error processing streak:', error);
         setError("An error occurred. Please try again.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData();
+    processStreak();
   }, [router]);
 
   if (isLoading) {
@@ -66,7 +65,7 @@ export default function StreakCelebrationClient() {
   }
 
   if (error || !userData) {
-    return <div className="text-red-500">{error || "Failed to load user data. Please try again."}</div>;
+    return <div className="text-red-500">{error || "Failed to load user data"}</div>;
   }
 
   return (
