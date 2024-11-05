@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '../../lib/api-client';
 import TelegramApiClient from '../../lib/telegram-api-client';
-import TokenLogo from './TokenLogo';
 import ProgressBar from './ProgressBar';
 import Button from './Button';
 import Confetti from './Confetti';
