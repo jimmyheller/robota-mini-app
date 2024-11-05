@@ -3,7 +3,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import TokenLogo from './TokenLogo';
 import Navigation from './Navigation';
 import UserProfile from './UserProfile';
 import CommunityJoin from './CommunityJoin';
@@ -82,7 +81,6 @@ const HomeClient: React.FC = () => {
     return (
         <div className="flex flex-col min-h-screen bg-black text-white">
             <main className="flex-grow p-4">
-                <TokenLogo className="mb-4" />
                 <UserProfile
                     username={homeData.user.username}
                     balance={homeData.user.balance.toLocaleString()}
