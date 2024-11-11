@@ -50,8 +50,8 @@ export default function StreakCheckClient() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-black text-white">
             <div className="text-center">
-                <h1 className="text-2xl font-bold mb-4">Checking your streak...</h1>
-                {/* You could add a loading spinner here */}
+                <h1 className="text-2xl font-bold mb-4"></h1>
+
             </div>
         </div>
     );
