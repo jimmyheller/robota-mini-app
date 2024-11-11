@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '../../lib/api-client';
 import TelegramApiClient from '../../lib/telegram-api-client';
@@ -20,27 +20,27 @@ const WelcomeTokenClient: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchWelcomeToken = async () => {
-      try {
-        const telegramId = await TelegramApiClient.getUserId();
-        if (telegramId) {
-          const response = await apiClient.post<UserData>('/users/welcome-token', { telegramId });
-          setUserData(response);
-        } else {
-          router.push('/telegram-check');
-          return;
-        }
-      } catch (err) {
-        console.error('Error fetching welcome token:', err);
-        setError('Failed to fetch welcome token. Please try again.');
-      } finally {
-        setIsLoading(false);
+  const fetchWelcomeToken = useCallback(async () => {
+    try {
+      const telegramId = await TelegramApiClient.getUserId();
+      if (telegramId) {
+        const response = await apiClient.post<UserData>('/users/welcome-token', { telegramId });
+        setUserData(response);
+      } else {
+        router.push('/telegram-check');
+        return;
       }
-    };
+    } catch (err) {
+      console.error('Error fetching welcome token:', err);
+      setError('Failed to fetch welcome token. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [router]);
 
+  useEffect(() => {
     fetchWelcomeToken();
-  }, []);
+  }, [fetchWelcomeToken]);
 
   // Render null during server-side rendering
   if (typeof window === 'undefined') {
