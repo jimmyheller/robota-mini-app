@@ -6,17 +6,17 @@ interface UserProfileProps {
     balance: string;
     initials: string;
     profilePhoto?: {
-        smallFileUrl: string;
-        largeFileUrl: string;
+        smallFileUrl?: string;
+        largeFileUrl?: string;
     };
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({
-                                                     username,
-                                                     balance,
-                                                     initials,
-                                                     profilePhoto
-                                                 }) => {
+    username,
+    balance,
+    initials,
+    profilePhoto
+}) => {
     const [imageError, setImageError] = useState(false);
     const initialsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -24,10 +24,13 @@ const UserProfile: React.FC<UserProfileProps> = ({
         setImageError(true);
     };
 
+    // Check if we have a valid profile photo URL
+    const hasValidPhoto = profilePhoto?.smallFileUrl && !imageError;
+
     return (
         <div className="bg-gray-800 rounded-lg p-4 flex items-center justify-between mb-4">
             <div className="flex items-center">
-                {profilePhoto && !imageError ? (
+                {hasValidPhoto ? (
                     <div className="relative w-10 h-10 mr-3">
                         <img
                             src={profilePhoto.smallFileUrl}
