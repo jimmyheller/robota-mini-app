@@ -1,14 +1,16 @@
 // app/components/HomeClient.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
 import Navigation from './Navigation';
-import UserProfile from './UserProfile';
+import UserProfile, {UserProfileSkeleton} from './UserProfile';
 import CommunityJoin from './CommunityJoin';
 import Rewards from './Rewards';
 import TelegramApiClient from '../../lib/telegram-api-client';
 import apiClient from '../../lib/api-client';
+
 
 interface HomeData {
     user: {
@@ -17,16 +19,12 @@ interface HomeData {
         balance: number;
         initials: string;
         rank: number;
+        profilePhoto?: {
+            smallFileUrl: string;
+            largeFileUrl: string;
+        };
     };
     rewards: {
-        accountAge: {
-            amount: number;
-            lastCalculated: Date;
-        };
-        premium: {
-            amount: number;
-            lastCalculated: Date;
-        };
         dailyCheckin: {
             amount: number;
             lastCalculated: Date;
@@ -70,31 +68,30 @@ const HomeClient: React.FC = () => {
         fetchHomeData();
     }, [router]);
 
-    if (isLoading) {
-        return <div className="text-white p-4">Loading...</div>;
-    }
-
-    if (error || !homeData) {
-        return <div className="text-red-500 p-4">{error || 'Failed to load data'}</div>;
-    }
-
     return (
         <div className="flex flex-col min-h-screen bg-black text-white">
             <main className="flex-grow p-4">
-                <UserProfile
-                    username={homeData.user.username}
-                    balance={homeData.user.balance.toLocaleString()}
-                    initials={homeData.user.initials}
-                />
-                <CommunityJoin />
-                <Rewards
-                    rewards={{
-                        accountAge: homeData.rewards.accountAge.amount.toLocaleString(),
-                        premium: homeData.rewards.premium.amount.toLocaleString(),
-                        invitedFriends: homeData.rewards.invitedFriends.amount.toLocaleString(),
-                        dailyCheckin: homeData.rewards.dailyCheckin.amount.toLocaleString()
-                    }}
-                />
+                {isLoading ? (
+                    <UserProfileSkeleton />
+                ) : error ? (
+                    <div className="text-red-500 p-4">{error}</div>
+                ) : homeData ? (
+                    <>
+                        <UserProfile
+                            username={homeData.user.username}
+                            balance={homeData.user.balance.toLocaleString()}
+                            initials={homeData.user.initials}
+                            profilePhoto={homeData.user.profilePhoto}
+                        />
+                        <CommunityJoin />
+                        <Rewards
+                            rewards={{
+                                invitedFriends: homeData.rewards.invitedFriends.amount.toLocaleString(),
+                                dailyCheckin: homeData.rewards.dailyCheckin.amount.toLocaleString()
+                            }}
+                        />
+                    </>
+                ) : null}
             </main>
         </div>
     );
