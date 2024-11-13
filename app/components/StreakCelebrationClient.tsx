@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Confetti from './Confetti';
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
 import Button from './Button';
 import TelegramApiClient from '../../lib/telegram-api-client';
 import apiClient from '../../lib/api-client';
@@ -20,17 +19,6 @@ interface UserData {
   referralCode: string;
   lastVisit: string;
   __v: number;
-}
-
-function isUserData(data: unknown): data is UserData {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'telegramId' in data &&
-    'tokens' in data &&
-    'currentStreak' in data &&
-    'firstName' in data
-  );
 }
 
 export default function StreakCelebrationClient() {
@@ -71,15 +59,13 @@ export default function StreakCelebrationClient() {
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white relative">
-      <Confetti />
       <div className="flex-grow flex flex-col items-center justify-center p-6">
-        <h1 className="text-9xl font-bold mb-2 text-green-400">{userData.currentStreak}</h1>
+        <h1 className="text-9xl font-bold mb-2 text-todo-green">{userData.currentStreak}</h1>
         <p className="text-2xl mb-4">Days Streak</p>
         <p className="text-xl mb-8">
-          <span className="text-gray-400">{userData.tokens}</span>{' '}
-          <span className="font-bold">$TODO</span>
+          <span className="text-todo-green font-bold">{userData.tokens}</span>{' '}
+          <span className="font-bold text-todo-green">$TODO</span>
         </p>
-        <p className="text-lg mb-4">Welcome back, {userData.firstName}!</p>
         <div className="w-full max-w-xs">
           <Button text="Continue..." href="/home" />
         </div>
