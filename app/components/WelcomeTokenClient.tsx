@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
 import apiClient from '../../lib/api-client';
 import TelegramApiClient from '../../lib/telegram-api-client';
-import ProgressBar from './ProgressBar';
 import Button from './Button';
-import Confetti from './Confetti';
+import TokenLogo from './TokenLogo';
 
 interface UserData {
   telegramId: number;
@@ -56,14 +55,17 @@ const WelcomeTokenClient: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white relative">
-      <Confetti />
+    <div className="flex flex-col min-h-screen bg-black text-white">
+      {/* Logo Section */}
+      <div className="flex justify-center items-center p-8">
+        <TokenLogo width={180} height={180} />
+      </div>
       <div className="flex-grow flex flex-col items-center justify-center p-6">
-        <h1 className="text-5xl font-bold mb-4">Welcome!</h1>
-        <p className="text-2xl mb-4">You`&apos;`ve received welcome bonus:</p>
-        <p className="text-6xl font-bold mb-8 text-green-400">{userData?.tokens} $TODO</p>
+        <h1 className="text-2xl font-bold mb-4">Earn Money with <br /> Small Tasks!</h1>
+        <p className="text-4xl font-bold mb-8 text-todo-green">{userData?.tokens} $TODO</p>
+        <p className="text-xl mb-4">You&apos;ve received as a <br />welcome bonus 🎉. </p>
         <div className="w-full max-w-xs">
-          <Button text="Continue..." href="/streak-celebration" />
+          <Button text="Continue..." href="/home" />
         </div>
       </div>
     </div>
