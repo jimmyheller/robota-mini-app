@@ -11,7 +11,7 @@ export default function LayoutWithNavigation({
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center items-center p-4">
-        <TokenLogo width={60} height={60} />
+        <TokenLogo width={120} height={120} />
       </div>
       <div className="flex-grow p-4 pb-24">
         {children}
