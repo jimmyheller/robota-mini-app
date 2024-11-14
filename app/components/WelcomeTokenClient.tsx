@@ -56,21 +56,26 @@ const WelcomeTokenClient: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
-      {/* Logo Section */}
-      <div className="flex justify-center items-center p-8">
-        <TokenLogo width={180} height={180} />
+      <div className="flex flex-col items-center">
+        {/* Logo Section */}
+        <div className="p-8">
+          <TokenLogo width={180} height={180} />
+        </div>
+        {/* Title directly under logo */}
+        <h1 className="text-2xl font-bold text-center">
+          Earn Money with <br /> Small Tasks!
+        </h1>
       </div>
+
       <div className="flex-grow flex flex-col items-center justify-center p-6">
-        <h1 className="text-2xl font-bold mb-4">Earn Money with <br /> Small Tasks!</h1>
-        <p className="text-4xl font-bold mb-8 text-todo-green">{userData?.tokens} $TODO</p>
-        <p className="text-xl mb-4">You&apos;ve received as a <br />welcome bonus 🎉. </p>
-        <div className="w-full max-w-xs">
+        <p className="text-4xl font-bold mb-8 text-todo-green-500">{userData?.tokens} $TODO</p>
+        <p className="text-xl mb-4 text-center">You&apos;ve received as a <br />welcome bonus 🎉</p>
+        <div className="w-full max-w-xs mt-auto">
           <Button text="Continue..." href="/home" />
         </div>
       </div>
     </div>
   );
-
 };
 
 export default WelcomeTokenClient;
