@@ -1,8 +1,7 @@
 // app/actions/streakActions.ts
 'use server';
 
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import apiClient from "@/lib/api-client";
 
 interface StreakStatus {
     shouldShowCelebration: boolean;
@@ -17,12 +16,8 @@ interface StreakStatus {
 
 export async function checkUserStreak(telegramId: string, tzOffset: number) {
     try {
-        const response = await fetch(
-            `${process.env.API_URL}/api/streak/check/${telegramId}?tzOffset=${tzOffset}`,
-            {
-                cache: 'no-store'  // Ensure we don't cache the streak check
-            }
-        );
+        await apiClient.get('')
+        const response = await fetch(`/streak/check/${telegramId}?tzOffset=${tzOffset}`);
 
         if (!response.ok) {
             throw new Error('Failed to check streak status');

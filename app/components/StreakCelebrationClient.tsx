@@ -6,23 +6,13 @@ import Button from './Button';
 import TelegramApiClient from '../../lib/telegram-api-client';
 import apiClient from '../../lib/api-client';
 
-interface UserData {
-  _id: string;
-  telegramId: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  languageCode: string;
-  isPremium: boolean;
-  tokens: number;
+interface StreakResponse {
+  rewardAmount: number;
   currentStreak: number;
-  referralCode: string;
-  lastVisit: string;
-  __v: number;
 }
 
 export default function StreakCelebrationClient() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<StreakResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -32,7 +22,7 @@ export default function StreakCelebrationClient() {
       try {
         const telegramId = await TelegramApiClient.getUserId();
         if (telegramId) {
-          const data = await apiClient.post<UserData>('/users/daily-streak', { telegramId });
+          const data = await apiClient.post<StreakResponse>('/users/daily-streak', { telegramId });
           setUserData(data);
         } else {
           router.push('/telegram-check');
@@ -63,7 +53,7 @@ export default function StreakCelebrationClient() {
         <h1 className="text-9xl font-bold mb-2 text-todo-green">{userData.currentStreak}</h1>
         <p className="text-2xl mb-4">Days Streak</p>
         <p className="text-xl mb-8">
-          <span className="text-todo-green font-bold">{userData.tokens}</span>{' '}
+          <span className="text-todo-green font-bold">{userData.rewardAmount}</span>{' '}
           <span className="font-bold text-todo-green">$TODO</span>
         </p>
         <div className="w-full max-w-xs">
