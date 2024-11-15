@@ -68,7 +68,7 @@ const WelcomeTokenClient: React.FC = () => {
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-center p-6">
-        <p className="text-4xl font-bold mb-8 text-todo-green-500">{userData?.tokens} $TODO</p>
+        <p className="text-4xl font-bold mb-8 text-todo-green">{userData?.tokens} $TODO</p>
         <p className="text-xl mb-4 text-center">You&apos;ve received as a <br />welcome bonus 🎉</p>
         <div className="w-full max-w-xs mt-auto">
           <Button text="Continue..." href="/home" />
