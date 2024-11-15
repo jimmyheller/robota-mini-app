@@ -61,8 +61,8 @@ export default function FriendsClient() {
 
     return (
         <>
-            <h2 className="text-xl mb-2">500 $TODOS for you</h2>
-            <h2 className="text-xl mb-6">1000 $TODOS for your friend</h2>
+            <h2 className="text-xl mb-2">500 $TODO for you</h2>
+            <h2 className="text-xl mb-6">1000 $TODO for your friend</h2>
             <InviteButton referralCode={friendsData.user.referralCode} />
             {/* <UserProfileCard
                 username={friendsData.user.username}
