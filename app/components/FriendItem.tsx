@@ -40,9 +40,9 @@ const FriendItem: React.FC<FriendItemProps> = ({
                 )}
                 <div>
                     <div className="text-white font-semibold">{username}</div>
-                    <div className="text-gray-400">{balance} $TODO</div>
                 </div>
             </div>
+            <div className="text-gray-400">{balance} $TODO</div>
         </div>
     );
 };
