@@ -20,8 +20,6 @@ const RewardItem: React.FC<RewardItemProps> = ({ icon, label, amount }) => (
 
 interface RewardsProps {
   rewards: {
-    accountAge: string;
-    premium: string;
     invitedFriends: string;
     dailyCheckin: string;
   };
@@ -30,16 +28,16 @@ interface RewardsProps {
 const Rewards: React.FC<RewardsProps> = ({ rewards }) => (
   <div>
     <h2 className="text-white font-bold mb-4">Your rewards</h2>
-    <RewardItem
+    {/* <RewardItem
       icon={<Clock className="w-5 h-5 text-gray-400" />}
       label="Account Age"
       amount={rewards.accountAge}
-    />
-    <RewardItem
+    /> */}
+    {/* <RewardItem
       icon={<Award className="w-5 h-5 text-gray-400" />}
       label="Telegram Premium"
       amount={rewards.premium}
-    />
+    /> */}
     <RewardItem
       icon={<UserPlus className="w-5 h-5 text-gray-400" />}
       label="Invited Friends"

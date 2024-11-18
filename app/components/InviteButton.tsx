@@ -7,8 +7,8 @@ interface InviteButtonProps {
 
 const InviteButton: React.FC<InviteButtonProps> = ({ referralCode }) => {
   const handleInvite = () => {
-    const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || 'rob_mini_test_bot';
-    const shareText = "Join me on Robota and earn $TODO tokens!";
+    const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || 'TODOManyTasksBot';
+    const shareText = "Join me on TODO and earn $TODO by completing small tasks!";
     const botUrl = `https://t.me/${botUsername}?start=${referralCode}`;
     const shareUrl = `https://t.me/share/url?url=${botUrl}&text=${shareText}`;
 

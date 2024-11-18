@@ -61,13 +61,14 @@ export default function FriendsClient() {
 
     return (
         <>
-            <h1 className="text-2xl font-bold mb-2">Invite friends</h1>
-            <h2 className="text-xl mb-6">and get more $TODO</h2>
-            <UserProfileCard
+            <h2 className="text-xl mb-2">500 $TODO for you</h2>
+            <h2 className="text-xl mb-6">1000 $TODO for your friend</h2>
+            <InviteButton referralCode={friendsData.user.referralCode} />
+            {/* <UserProfileCard
                 username={friendsData.user.username}
                 balance={friendsData.user.balance.toString()}
                 rank={friendsData.user.rank}
-            />
+            /> */}
             <h3 className="text-xl font-semibold mb-4">
                 {friendsData.friends.length} Friends
             </h3>
@@ -79,7 +80,7 @@ export default function FriendsClient() {
                     initials={friend.initials}
                 />
             ))}
-            <InviteButton referralCode={friendsData.user.referralCode} />
+
         </>
     );
 }
