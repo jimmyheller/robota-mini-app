@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import UserProfileCard, { UserProfileCardSkeleton } from './UserProfileCard';
 import LeaderboardItem, {LeaderboardItemSkeleton} from './LeaderboardItem';
 import TelegramApiClient from '../../lib/telegram-api-client';
@@ -18,7 +18,6 @@ interface LeaderboardEntry {
         largeFileUrl?: string;
     };
 }
-
 
 interface LeaderboardData {
     leaderboard: LeaderboardEntry[];
@@ -52,7 +51,8 @@ function isLeaderboardData(data: unknown): data is LeaderboardData {
 }
 
 export default function LeaderboardClient() {
-    const [leaderboardData, setLeaderboardData] = useState<LeaderboardData | null>(null);
+    const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([]);
+    const [totalUsers, setTotalUsers] = useState(0);
     const [userData, setUserData] = useState<{
         username: string;
         balance: string;
@@ -64,11 +64,78 @@ export default function LeaderboardClient() {
         };
     } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [offset, setOffset] = useState(0);
+    const LIMIT = 500;
     const SKELETON_COUNT = 3;
 
+    const hasMore = useRef(true);
+    const observerTarget = useRef(null);
+
+    const loadMoreItems = useCallback(async () => {
+        if (isLoadingMore || !hasMore.current) return;
+
+        try {
+            setIsLoadingMore(true);
+
+            const data = await apiClient.get<LeaderboardData>(`/leaderboard?limit=${LIMIT}&offset=${offset}`);
+
+            if (!isLeaderboardData(data)) {
+                throw new Error("Invalid leaderboard data received");
+            }
+
+            if (data.leaderboard.length === 0) {
+                hasMore.current = false;
+                return;
+            }
+
+            setLeaderboardEntries(prev => [...prev, ...data.leaderboard]);
+            setTotalUsers(data.total);
+            setOffset(prev => prev + LIMIT);
+
+            // Check if we've loaded all items
+            hasMore.current = offset + LIMIT < data.total;
+
+        } catch (error) {
+            console.error('Error loading more items:', error);
+            setError("Error loading more items");
+        } finally {
+            setIsLoadingMore(false);
+        }
+    }, [offset, isLoadingMore]);
+
+    // Improved Intersection Observer setup
     useEffect(() => {
-        const fetchData = async () => {
+        const observer = new IntersectionObserver(
+            entries => {
+                const first = entries[0];
+                if (first.isIntersecting && hasMore.current) {
+                    loadMoreItems();
+                }
+            },
+            {
+                threshold: 0.1,
+                rootMargin: '200px' // Start loading before reaching the end
+            }
+        );
+
+        const currentTarget = observerTarget.current;
+
+        if (currentTarget) {
+            observer.observe(currentTarget);
+        }
+
+        return () => {
+            if (currentTarget) {
+                observer.unobserve(currentTarget);
+            }
+        };
+    }, [loadMoreItems]);
+
+    // Initial data fetch
+    useEffect(() => {
+        const fetchInitialData = async () => {
             try {
                 const telegramId = await TelegramApiClient.getUserId();
                 if (!telegramId) {
@@ -76,12 +143,15 @@ export default function LeaderboardClient() {
                     return;
                 }
 
-                // Fetch leaderboard data
-                const data = await apiClient.get<LeaderboardData>('/leaderboard');
+                // Fetch initial leaderboard data
+                const data = await apiClient.get<LeaderboardData>(`/leaderboard?limit=${LIMIT}&offset=0`);
                 if (!isLeaderboardData(data)) {
                     throw new Error("Invalid leaderboard data received");
                 }
-                setLeaderboardData(data);
+                setLeaderboardEntries(data.leaderboard);
+                setTotalUsers(data.total);
+                setOffset(LIMIT);
+                hasMore.current = LIMIT < data.total;
 
                 // Fetch user data for the UserProfileCard
                 const userHomeData = await apiClient.get<HomeData>(`/users/home/${telegramId}`);
@@ -101,7 +171,7 @@ export default function LeaderboardClient() {
             }
         };
 
-        fetchData();
+        fetchInitialData();
     }, []);
 
     return (
@@ -114,14 +184,13 @@ export default function LeaderboardClient() {
                     <h2 className="text-xl font-semibold mb-4">
                         <div className="h-6 w-24 bg-gray-700 rounded animate-pulse" />
                     </h2>
-                    {/* Create array of skeleton items */}
                     {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
                         <LeaderboardItemSkeleton key={index} />
                     ))}
                 </>
             ) : error ? (
                 <div className="text-red-500 p-4">{error}</div>
-            ) : leaderboardData && userData ? (
+            ) : userData ? (
                 <>
                     <UserProfileCard
                         username={userData.username}
@@ -132,20 +201,30 @@ export default function LeaderboardClient() {
                     />
 
                     <h2 className="text-xl font-semibold mb-4">
-                        {leaderboardData.total} holders
+                        {totalUsers} holders
                     </h2>
 
-                    {leaderboardData.leaderboard.map((item, index) => (
-                        <LeaderboardItem
-                            key={item.id}
-                            username={item.name}
-                            balance={item.tokens.toString()}
-                            rank={item.rank}
-                            medal={index < 3 ? ['gold', 'silver', 'bronze'][index] as 'gold' | 'silver' | 'bronze' : null}
-                            initials={item.initials}
-                            profilePhoto={item.profilePhoto}
-                        />
-                    ))}
+                    <div className="flex flex-col space-y-4">
+                        {leaderboardEntries.map((item, index) => (
+                            <LeaderboardItem
+                                key={item.id}
+                                username={item.name}
+                                balance={item.tokens.toString()}
+                                rank={item.rank}
+                                medal={index < 3 ? ['gold', 'silver', 'bronze'][index] as 'gold' | 'silver' | 'bronze' : null}
+                                initials={item.initials}
+                                profilePhoto={item.profilePhoto}
+                            />
+                        ))}
+                    </div>
+
+                    <div ref={observerTarget} className="h-10 w-full">
+                        {isLoadingMore && (
+                            <div className="py-4">
+                                <LeaderboardItemSkeleton />
+                            </div>
+                        )}
+                    </div>
                 </>
             ) : null}
         </div>
