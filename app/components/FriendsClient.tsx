@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import UserProfileCard from './UserProfileCard';
 import FriendItem from './FriendItem';
 import InviteButton from './InviteButton';
 import TelegramApiClient from '../../lib/telegram-api-client';
@@ -11,15 +10,24 @@ interface FriendData {
     username: string;
     balance: number;
     initials: string;
+    profilePhoto?: {
+        smallFileUrl?: string;
+        largeFileUrl?: string;
+    };
 }
 
 interface FriendsResponse {
+    total: number;  // Total number of all friends
     user: {
         username: string;
         balance: number;
         rank: string;
         referralCode: string;
         initials: string;
+        profilePhoto?: {
+            smallFileUrl?: string;
+            largeFileUrl?: string;
+        };
     };
     friends: FriendData[];
 }
@@ -38,7 +46,7 @@ export default function FriendsClient() {
                     return;
                 }
 
-                const data = await apiClient.get<FriendsResponse>(`/users/friends/${telegramId}`);
+                const data = await apiClient.get<FriendsResponse>(`/friend/friends/${telegramId}`);
                 setFriendsData(data);
             } catch (error) {
                 console.error('Error fetching friends data:', error);
@@ -70,7 +78,7 @@ export default function FriendsClient() {
                 rank={friendsData.user.rank}
             /> */}
             <h3 className="text-xl font-semibold mb-4">
-                {friendsData.friends.length} Friends
+                {friendsData.total} Friends
             </h3>
             {friendsData.friends.map((friend, index) => (
                 <FriendItem
@@ -78,6 +86,7 @@ export default function FriendsClient() {
                     username={friend.username}
                     balance={friend.balance.toString()}
                     initials={friend.initials}
+                    profilePhoto={friend.profilePhoto}
                 />
             ))}
 

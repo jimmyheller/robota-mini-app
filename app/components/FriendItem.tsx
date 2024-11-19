@@ -11,11 +11,11 @@ interface FriendItemProps {
 }
 
 const FriendItem: React.FC<FriendItemProps> = ({
-                                                   username,
-                                                   balance,
-                                                   initials,
-                                                   profilePhoto
-                                               }) => {
+    username,
+    balance,
+    initials,
+    profilePhoto
+}) => {
     const [imageError, setImageError] = useState(false);
 
     // Check if we have a valid profile photo URL
