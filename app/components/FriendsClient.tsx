@@ -46,7 +46,7 @@ export default function FriendsClient() {
                     return;
                 }
 
-                const data = await apiClient.get<FriendsResponse>(`/friend/friends/${telegramId}`);
+                const data = await apiClient.get<FriendsResponse>(`/friend/${telegramId}`);
                 setFriendsData(data);
             } catch (error) {
                 console.error('Error fetching friends data:', error);
