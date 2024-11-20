@@ -1,7 +1,7 @@
 // lib/telegram-api-client.ts
 
 import WebApp from '@twa-dev/sdk';
-import {MOCK_TELEGRAM_DATA, MOCK_TELEGRAM_USER} from '../';
+import {MOCK_TELEGRAM_DATA, MOCK_TELEGRAM_USER} from '../mocks/mockData';
 
 class TelegramApiClient {
     private static isInitialized = false;
