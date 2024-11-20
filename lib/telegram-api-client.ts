@@ -1,6 +1,7 @@
 // lib/telegram-api-client.ts
 
 import WebApp from '@twa-dev/sdk';
+import {MOCK_TELEGRAM_DATA, MOCK_TELEGRAM_USER} from '../mocks/mockData';
 
 class TelegramApiClient {
     private static isInitialized = false;
@@ -11,6 +12,10 @@ class TelegramApiClient {
         }
 
         if (!this.isInitialized) {
+            if (process.env.NEXT_PUBLIC_USE_MOCKS === 'true') {
+                this.isInitialized = true;
+                return;
+            }
             // Use WebApp.ready() to ensure the app is initialized
             await new Promise<void>((resolve) => {
                 WebApp.ready();
@@ -21,10 +26,16 @@ class TelegramApiClient {
     }
 
     static getInitData(): string {
+        if (process.env.NEXT_PUBLIC_USE_MOCKS === 'true') {
+            return MOCK_TELEGRAM_DATA.initData;
+        }
         return WebApp.initData;
     }
 
     static async getUserId(): Promise<string> {
+        if (process.env.NEXT_PUBLIC_USE_MOCKS === 'true') {
+            return MOCK_TELEGRAM_USER.telegramId;
+        }
         await this.ensureInitialized();
         return WebApp.initDataUnsafe?.user?.id.toString() || '';
     }
