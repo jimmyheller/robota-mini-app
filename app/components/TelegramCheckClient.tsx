@@ -26,7 +26,7 @@ const TelegramCheckClient: React.FC = () => {
   useEffect(() => {
     const initTelegram = async () => {
       try {
-        const initData = await TelegramApiClient.getInitData();
+        const initData = TelegramApiClient.getInitData();
         if (!initData) {
           setError("Telegram Web App data is not available. Are you running this in Telegram?");
           setIsLoading(false);
@@ -43,8 +43,7 @@ const TelegramCheckClient: React.FC = () => {
           }));
           await new Promise(resolve => setTimeout(resolve, 500)); // Add delay between checks
         }
-
-        const userData = await apiClient.post('/users/authenticate', { initData });
+        await apiClient.post('/users/authenticate', { initData });
         setIsLoading(false);
       } catch (error) {
         console.error('Error authenticating user:', error);

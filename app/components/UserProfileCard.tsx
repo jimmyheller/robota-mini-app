@@ -1,5 +1,5 @@
 // app/components/UserProfileCard.tsx
-import React, { useState, useRef } from 'react';
+import React, {useState} from 'react';
 
 interface UserProfileCardProps {
   username: string;
@@ -43,7 +43,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({
         )}
         <div>
           <div className="text-white font-semibold">{username}</div>
-          <div className="text-gray-400">{balance} $TODO</div>
+          <div className="text-gray-400">{balance.toLocaleString()} $TODO</div>
         </div>
       </div>
       <span className="text-gray-400">#{rank}</span>

@@ -157,7 +157,7 @@ export default function LeaderboardClient() {
                 const userHomeData = await apiClient.get<HomeData>(`/users/home/${telegramId}`);
                 setUserData({
                     username: userHomeData.user.username,
-                    balance: userHomeData.user.balance.toString(),
+                    balance: userHomeData.user.balance.toLocaleString(),
                     rank: userHomeData.user.rank?.toString() || "N/A",
                     initials: userHomeData.user.initials,
                     profilePhoto: userHomeData.user.profilePhoto
@@ -209,7 +209,7 @@ export default function LeaderboardClient() {
                             <LeaderboardItem
                                 key={item.id}
                                 username={item.name}
-                                balance={item.tokens.toString()}
+                                balance={item.tokens.toLocaleString()}
                                 rank={item.rank}
                                 medal={index < 3 ? ['gold', 'silver', 'bronze'][index] as 'gold' | 'silver' | 'bronze' : null}
                                 initials={item.initials}
