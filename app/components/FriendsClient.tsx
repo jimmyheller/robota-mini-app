@@ -79,7 +79,7 @@ export default function FriendsClient() {
                 <FriendItem
                     key={index}
                     username={friend.username}
-                    balance={friend.balance.toString()}
+                    balance={friend.balance.toLocaleString()}
                     initials={friend.initials}
                     profilePhoto={friend.profilePhoto}
                 />
