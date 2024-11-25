@@ -18,6 +18,13 @@ const config: Config = {
           'green': '#52FF00',
         },
       },
+      fontFamily: {
+        sans: ['var(--font-inter)'], // This makes Inter the default font
+      },
+      fontWeight: {
+        regular: '400',
+        bold: '700',
+      },
     },
   },
   plugins: [],

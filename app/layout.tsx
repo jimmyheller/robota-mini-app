@@ -1,9 +1,16 @@
+//app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ["latin"] });
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ['400', '700'], // Adding regular (400) and bold (700)
+  display: 'swap',
+  variable: '--font-inter', // This allows us to reference it in Tailwind
+});
 
 const TelegramInitializerWrapper = dynamic(
   () => import('./components/TelegramInitializer'),
@@ -22,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex flex-col min-h-screen bg-black text-white`}>
+      <body className={`${inter.variable} font-sans flex flex-col min-h-screen bg-black text-white`}>
         <TelegramInitializerWrapper />
         <main className="flex-grow">
           {children}

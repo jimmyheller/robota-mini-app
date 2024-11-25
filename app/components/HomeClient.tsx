@@ -1,16 +1,11 @@
 // app/components/HomeClient.tsx
 'use client';
 
-
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import Navigation from './Navigation';
-import UserProfile, {UserProfileSkeleton} from './UserProfile';
-import CommunityJoin from './CommunityJoin';
-import Rewards from './Rewards';
 import TelegramApiClient from '../../lib/telegram-api-client';
 import apiClient from '../../lib/api-client';
-
+import {PlusCircleIcon} from './Icons';
 
 interface HomeData {
     user: {
@@ -69,30 +64,43 @@ const HomeClient: React.FC = () => {
     }, [router]);
 
     return (
-        <div className="flex flex-col min-h-screen bg-black text-white">
-            <main className="flex-grow p-4">
-                {isLoading ? (
-                    <UserProfileSkeleton />
-                ) : error ? (
-                    <div className="text-red-500 p-4">{error}</div>
-                ) : homeData ? (
-                    <>
-                        <UserProfile
-                            username={homeData.user.username}
-                            balance={homeData.user.balance.toLocaleString()}
-                            initials={homeData.user.initials}
-                            profilePhoto={homeData.user.profilePhoto}
-                        />
-                        <CommunityJoin />
-                        <Rewards
-                            rewards={{
-                                invitedFriends: homeData.rewards.invitedFriends.amount.toLocaleString(),
-                                dailyCheckin: homeData.rewards.dailyCheckin.amount.toLocaleString()
-                            }}
-                        />
-                    </>
-                ) : null}
-            </main>
+        <div className="flex flex-col flex-1">
+            {isLoading ? (
+                <div className="animate-pulse flex flex-col items-center">
+                    <div className="h-12 w-48 bg-gray-700 rounded-lg" />
+                </div>
+            ) : error ? (
+                <div className="text-red-500 p-4">{error}</div>
+            ) : homeData ? (
+                <>
+                    <div className="px-6">
+                        <div className="flex justify-center mt-4">
+              <span className="text-[48px] leading-[77px] font-bold text-todo-green">
+                {homeData.user.balance.toLocaleString()}
+              </span>
+                        </div>
+                    </div>
+
+                    {/* Changed this div to have specific margin instead of flex-1 */}
+                    <div className="mt-auto mb-8" />
+
+                    <div className="px-6 mb-8">
+                        <div className="flex justify-between items-center mb-3">
+                            <h1 className="text-[32px] font-bold text-white">TODOs</h1>
+                            <button
+                                className="flex items-center gap-2 text-white"
+                                onClick={() => {/* TODO: Add handler */}}
+                            >
+                                <PlusCircleIcon className="w-6 h-6" />
+                                <span className="text-[17px]">Add yours</span>
+                            </button>
+                        </div>
+                        <p className="text-[17px] text-white">
+                            All tasks are done for today. Come back tomorrow!
+                        </p>
+                    </div>
+                </>
+            ) : null}
         </div>
     );
 };
