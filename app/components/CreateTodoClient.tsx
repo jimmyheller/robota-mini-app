@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {useRouter} from 'next/navigation';
+import {PlusCircleIcon} from "@/app/components/Icons";
 
 const taskTypes = [
     {id: 'channel', label: 'Join my Channel', enabled: true},
@@ -23,16 +24,15 @@ const CreateTodoClient = () => {
         <div className="flex flex-col min-h-screen bg-black text-white p-4">
             {/* Balance display */}
             <div className="flex justify-between items-center mb-8">
-        <span className="text-[48px] font-bold text-[#52FF00]">
+        <span className="text-[40px] font-bold text-[#52FF00]">
           {balance.toLocaleString()}
-            <span className="text-2xl">$TODO</span>
         </span>
                 <button
-                    className="flex items-center gap-2 text-white bg-[#1C1C1E] px-4 py-2 rounded-lg"
-                    onClick={() => {/* TODO: Implement buy TODO */
-                    }}
+                    onClick={() => router.push('/create-todo')}
+                    className="flex items-center gap-3 text-white hover:text-[#52FF00] transition-colors group"
                 >
-                    <span>Buy TODO</span>
+                    <PlusCircleIcon className="w-6 h-6"/>
+                    <span className="text-[18px] font-medium">Buy TODO</span>
                 </button>
             </div>
 

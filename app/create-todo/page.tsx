@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
 const CreateTodoClient = dynamic(
-    () => import('../../components/CreateTodoClientComponent'),
+    () => import('../components/CreateTodoClient'),
     { ssr: false }
 );
 
