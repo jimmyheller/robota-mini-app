@@ -121,14 +121,14 @@ const HomeClient = () => {
             </motion.div>
 
             {/* TODOs Section */}
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-[32px] font-bold text-white">TODOs</h1>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-[36px] font-bold text-white">TODOs</h1>
                 <button
                     onClick={() => router.push('/create-todo')}
-                    className="flex items-center gap-2 text-white hover:text-[#52FF00] transition-colors"
+                    className="flex items-center gap-3 text-white hover:text-[#52FF00] transition-colors group"
                 >
                     <PlusCircleIcon className="w-6 h-6"/>
-                    <span className="text-[17px]">Add yours</span>
+                    <span className="text-[18px] font-medium">Add yours</span>
                 </button>
             </div>
 
